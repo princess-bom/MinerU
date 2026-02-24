@@ -7,7 +7,6 @@ const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
 const TERMINAL_STATES = new Set(["succeeded", "failed", "cancelled"]);
-const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
 
 const scriptDir = __dirname;
 const desktopRoot = path.resolve(scriptDir, "..");
@@ -60,13 +59,19 @@ function runDesktopBuildIfNeeded(mode) {
     return;
   }
 
-  const result = spawnSync(npmCommand, ["run", "build"], {
+  const result = spawnSync("npm", ["run", "build"], {
     cwd: desktopRoot,
     encoding: "utf8",
+    shell: process.platform === "win32",
   });
 
   if (result.status !== 0) {
-    throw new Error("desktop build failed before smoke run");
+    const spawnError = result.error?.message ?? "none";
+    const stdout = result.stdout ?? "";
+    const stderr = result.stderr ?? "";
+    throw new Error(
+      `desktop build failed before smoke run\nspawn error: ${spawnError}\nstdout:\n${stdout}\nstderr:\n${stderr}`,
+    );
   }
 }
 
