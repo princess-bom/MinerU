@@ -1,0 +1,7 @@
+{
+  "fixtureId": "contract-success-pipeline-txt",
+  "inputRelPath": "tests/unittest/pdfs/test.pdf",
+  "backend": "pipeline",
+  "method": "txt",
+  "lang": "en"
+}

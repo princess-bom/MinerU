@@ -1,0 +1,7 @@
+{
+  "fixtureId": "contract-failure-missing-input",
+  "inputRelPath": "tests/unittest/pdfs/does-not-exist.pdf",
+  "backend": "pipeline",
+  "method": "txt",
+  "lang": "en"
+}
