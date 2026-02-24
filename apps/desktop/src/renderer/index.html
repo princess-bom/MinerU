@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MinerU Desktop</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f2efe7;
+        --panel: #fffdf8;
+        --ink: #2f2a1f;
+        --accent: #0f6f5c;
+        --line: #d7cebe;
+        --ok: #1e7c50;
+        --err: #a0372f;
+        --warn: #8a5f0d;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(circle at 20% 20%, #fff7e1 0%, var(--bg) 56%);
+        color: var(--ink);
+        font-family: "Iowan Old Style", "Palatino Linotype", serif;
+      }
+
+      #app {
+        max-width: 860px;
+        margin: 36px auto;
+        padding: 24px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 18px;
+        box-shadow: 0 18px 36px rgba(33, 23, 12, 0.08);
+      }
+
+      h1 {
+        margin: 0 0 18px;
+        font-size: 1.6rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      button {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+        color: var(--ink);
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: transform 120ms ease;
+      }
+
+      button:hover:enabled {
+        transform: translateY(-1px);
+      }
+
+      button:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+
+      .run {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .path {
+        margin: 0;
+        font-size: 0.92rem;
+        word-break: break-all;
+      }
+
+      .badge-row {
+        display: flex;
+        gap: 8px;
+      }
+
+      .badge {
+        border: 1px solid transparent;
+        border-radius: 999px;
+        padding: 2px 10px;
+        font-size: 0.82rem;
+      }
+
+      .ok {
+        color: var(--ok);
+        border-color: color-mix(in srgb, var(--ok), #fff 70%);
+      }
+
+      .err {
+        color: var(--err);
+        border-color: color-mix(in srgb, var(--err), #fff 70%);
+      }
+
+      .warn {
+        color: var(--warn);
+        border-color: color-mix(in srgb, var(--warn), #fff 70%);
+      }
+
+      #log-panel {
+        margin-top: 8px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #1d1a16;
+        color: #ece8df;
+        padding: 10px;
+        min-height: 220px;
+        max-height: 320px;
+        overflow: auto;
+        font: 12px/1.45 "Menlo", "Consolas", monospace;
+        white-space: pre-wrap;
+      }
+
+      @media (max-width: 640px) {
+        #app {
+          margin: 14px auto;
+          padding: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="app">
+      <section class="panel">
+        <h1>MinerU Desktop Runner</h1>
+        <div class="grid">
+          <div>
+            <div class="row">
+              <button data-testid="input-file" id="input-file-btn">Pick Input PDF</button>
+            </div>
+            <p class="path" id="input-file-path">No input file selected.</p>
+          </div>
+
+          <div>
+            <div class="row">
+              <button data-testid="output-dir" id="output-dir-btn">Pick Output Folder</button>
+              <button data-testid="open-output-btn" id="open-output-btn" disabled>Open Output Folder</button>
+            </div>
+            <p class="path" id="output-dir-path">No output folder selected.</p>
+          </div>
+
+          <div class="row">
+            <button class="run" data-testid="run-btn" id="run-btn" disabled>Run</button>
+            <button data-testid="cancel-btn" id="cancel-btn" disabled>Cancel</button>
+          </div>
+
+          <div class="badge-row">
+            <span class="badge ok" data-testid="status-succeeded" id="status-succeeded" hidden>Succeeded</span>
+            <span class="badge err" data-testid="status-failed" id="status-failed" hidden>Failed</span>
+            <span class="badge warn" data-testid="status-cancelled" id="status-cancelled" hidden>Cancelled</span>
+          </div>
+
+          <div data-testid="log-panel" id="log-panel"></div>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="../../dist/renderer/index.js"></script>
+  </body>
+</html>
