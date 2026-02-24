@@ -54,6 +54,16 @@ jobs:
       - name: Run desktop unpackaged smoke
         run: npm --prefix apps/desktop run smoke:unpackaged
 
+      - name: Dry-run Windows build script
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: pwsh -File scripts/desktop/build-win.ps1 -DryRun
+
+      - name: Dry-run Windows packaged smoke script
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: pwsh -File apps/desktop/scripts/smoke-packaged-win.ps1 -DryRun
+
       - name: Upload desktop evidence
         if: always()
         uses: actions/upload-artifact@v4
