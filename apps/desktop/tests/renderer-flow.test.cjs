@@ -8,8 +8,6 @@ const { spawnSync } = require("child_process");
 const desktopRoot = path.resolve(__dirname, "..");
 const repoRoot = path.resolve(desktopRoot, "..", "..");
 const fixturePdf = path.join(repoRoot, "tests", "unittest", "pdfs", "test.pdf");
-const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
-
 let playwright = null;
 try {
   playwright = require("playwright");
@@ -18,13 +16,20 @@ try {
 }
 
 function runDesktopBuild() {
-  const result = spawnSync(npmCommand, ["run", "build"], {
+  const result = spawnSync("npm", ["run", "build"], {
     cwd: desktopRoot,
-    encoding: "utf8"
+    encoding: "utf8",
+    shell: process.platform === "win32"
   });
 
-  if (result.status !== 0) {
-    const details = [result.stdout, result.stderr].filter(Boolean).join("\n");
+  if (result.error || result.status !== 0) {
+    const details = [
+      result.error?.message ? `spawn error: ${result.error.message}` : null,
+      result.stdout,
+      result.stderr
+    ]
+      .filter(Boolean)
+      .join("\n");
     throw new Error(`desktop build failed\n${details}`);
   }
 }
