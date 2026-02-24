@@ -3,17 +3,17 @@ name: mineru-desktop-test
 on:
   push:
     branches:
-      - "master"
-      - "dev"
+      - master
+      - dev
     paths:
-      - ".github/workflows/desktop.yml"
-      - "apps/desktop/**"
-      - "tests/unittest/pdfs/test.pdf"
+      - .github/workflows/desktop.yml
+      - apps/desktop/**
+      - tests/unittest/pdfs/test.pdf
   pull_request:
     paths:
-      - ".github/workflows/desktop.yml"
-      - "apps/desktop/**"
-      - "tests/unittest/pdfs/test.pdf"
+      - .github/workflows/desktop.yml
+      - apps/desktop/**
+      - tests/unittest/pdfs/test.pdf
 
 jobs:
   desktop-checks:
