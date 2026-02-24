@@ -1,0 +1,72 @@
+name: mineru-desktop-test
+
+on:
+  push:
+    branches:
+      - "master"
+      - "dev"
+    paths:
+      - ".github/workflows/desktop.yml"
+      - "apps/desktop/**"
+      - "tests/unittest/pdfs/test.pdf"
+  pull_request:
+    paths:
+      - ".github/workflows/desktop.yml"
+      - "apps/desktop/**"
+      - "tests/unittest/pdfs/test.pdf"
+
+jobs:
+  desktop-checks:
+    timeout-minutes: 60
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - os: macos-latest
+            os_name: macos
+            npm_command: npm
+            shell: bash
+          - os: windows-latest
+            os_name: windows
+            npm_command: npm.cmd
+            shell: pwsh
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: apps/desktop/package-lock.json
+
+      - name: Install desktop dependencies
+        shell: ${{ matrix.shell }}
+        run: ${{ matrix.npm_command }} --prefix apps/desktop ci
+
+      - name: Install Playwright browsers
+        shell: ${{ matrix.shell }}
+        run: ${{ matrix.npm_command }} --prefix apps/desktop exec playwright install
+
+      - name: Typecheck desktop app
+        shell: ${{ matrix.shell }}
+        run: ${{ matrix.npm_command }} --prefix apps/desktop run typecheck
+
+      - name: Run desktop tests
+        shell: ${{ matrix.shell }}
+        run: ${{ matrix.npm_command }} --prefix apps/desktop run test
+
+      - name: Run desktop unpackaged smoke
+        shell: ${{ matrix.shell }}
+        run: ${{ matrix.npm_command }} --prefix apps/desktop run smoke:unpackaged
+
+      - name: Upload desktop evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-evidence-${{ matrix.os_name }}
+          path: .sisyphus/evidence/
+          if-no-files-found: warn
