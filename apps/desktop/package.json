@@ -1,0 +1,29 @@
+{
+  "name": "mineru-desktop",
+  "private": true,
+  "version": "0.1.0",
+  "description": "MinerU desktop shell",
+  "main": "dist/main/index.js",
+  "scripts": {
+    "dev": "npm run build && electron .",
+    "smoke:unpackaged": "node scripts/smoke-unpackaged.cjs",
+    "typecheck": "npm run typecheck:main && npm run typecheck:preload && npm run typecheck:renderer",
+    "typecheck:main": "tsc --noEmit -p tsconfig.main.json",
+    "typecheck:preload": "tsc --noEmit -p tsconfig.preload.json",
+    "typecheck:renderer": "tsc --noEmit -p tsconfig.renderer.json",
+    "test": "node tests/run-tests.cjs",
+    "build": "npm run build:main && npm run build:preload && npm run build:renderer",
+    "build:main": "tsc -p tsconfig.main.json",
+    "build:preload": "tsc -p tsconfig.preload.json",
+    "build:renderer": "tsc -p tsconfig.renderer.json",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:win": "npm run build && electron-builder --win"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.57",
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3",
+    "playwright": "^1.54.2",
+    "typescript": "^5.6.3"
+  }
+}

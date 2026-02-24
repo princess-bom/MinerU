@@ -1,0 +1,14 @@
+appId: net.mineru.desktop
+productName: MinerU Desktop
+directories:
+  output: release
+files:
+  - dist/**
+  - src/renderer/index.html
+  - package.json
+mac:
+  target:
+    - dmg
+win:
+  target:
+    - nsis
